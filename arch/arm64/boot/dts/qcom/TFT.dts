@@ -48,13 +48,13 @@
             spi_lcd {
                 //配置指定引脚的 复用/上下拉/驱动能力 等
                 spi_lcd_cmd_pin: spi_lcd_cmd_pin {
-                    rockchip,pins = <3 RK_PA7 RK_FUNC_GPIO &pcfg_pull_up_drv_level_1>;
+                    rockchip,pins = <4 RK_PA7 RK_FUNC_GPIO &pcfg_pull_up_drv_level_1>;
                 };
                 spi_lcd_reset_pin: spi_lcd_reset_pin {
-                    rockchip,pins = <3 RK_PA6 RK_FUNC_GPIO &pcfg_pull_up_drv_level_1>;
+                    rockchip,pins = <4 RK_PA6 RK_FUNC_GPIO &pcfg_pull_up_drv_level_1>;
                 };        
                 spi_lcd_light_pin: spi_lcd_light_pin {
-                    rockchip,pins = <3 RK_PB6 RK_FUNC_GPIO &pcfg_pull_up_drv_level_1>;
+                    rockchip,pins = <4 RK_PB6 RK_FUNC_GPIO &pcfg_pull_up_drv_level_1>;
                 };
             };
 
