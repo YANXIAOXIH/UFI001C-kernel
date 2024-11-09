@@ -1,0 +1,100 @@
+/dts-v1/;
+/plugin/;
+
+#include <dt-bindings/gpio/gpio.h>
+#include <dt-bindings/pinctrl/rockchip.h>
+
+/ {
+        compatible = "rockchip,rk3588";
+        fragment@0 {
+                target = <&spi3>;
+
+           __overlay__ {
+                        status = "okay";
+                        #address-cells = <1>;
+                        #size-cells = <0>;
+
+                        // 40PIN引脚只预留SPI3 CS0引脚，如果有多个CS信号，可以使用gpio模拟cs 
+                        pinctrl-names = "default", "high_speed";
+                        pinctrl-0 = <&spi3m1_cs0 &spi3m1_pins>;
+                        pinctrl-1 = <&spi3m1_cs0 &spi3m1_pins_hs>;
+
+                        spi_dev@0 {
+                                compatible = "rockchip,spidev";
+                                reg = <0>; //chip select 0:cs0  1:cs1
+                                spi-max-frequency = <24000000>; //spi output clock
+                        };
+
+                        display@0{
+                                compatible = "ilitek,st7789v"; //匹配驱动程序用
+                                reg = <0>;
+                                spi-max-frequency = <96000000>;//spi速率
+                                dc-gpios = <&gpio4 RK_PA7 GPIO_ACTIVE_HIGH>;#设置dc引脚
+                                reset-gpios = <&gpio4 RK_PA6 GPIO_ACTIVE_HIGH>;#设置rst引脚
+                                led-gpios = <&gpio4 RK_PB6 GPIO_ACTIVE_LOW>; //GPIO3_A5 back light 101
+                                rotation = <0>;//设置屏幕旋转角度 ，不过对我的st7789v好像没啥用
+                                backlight = <&backlight>; //背光
+                                buswidth = <8>; //数据宽度
+                                debug = <0>; //debug级别，数越大，调试等级越高
+                                bgr = <0>;//设置是RGB还是BGR
+                                fps = <30>;//帧率
+                                pinctrl-names = "default";
+                pinctrl-0 = <&spi_lcd_cmd_pin &spi_lcd_reset_pin &spi_lcd_light_pin>;#声明使用的引脚
+                        };
+                };
+        };
+
+        fragment@1 {
+        target = <&pinctrl>;
+
+        __overlay__ {
+            spi_lcd {
+                //配置指定引脚的 复用/上下拉/驱动能力 等
+                spi_lcd_cmd_pin: spi_lcd_cmd_pin {
+                    rockchip,pins = <4 RK_PB6 RK_FUNC_GPIO &pcfg_pull_up_drv_level_1>;
+                };
+                spi_lcd_reset_pin: spi_lcd_reset_pin {
+                    rockchip,pins = <4 RK_PB6 RK_FUNC_GPIO &pcfg_pull_up_drv_level_11>;
+                };        
+                spi_lcd_light_pin: spi_lcd_light_pin {
+                    rockchip,pins = <4 RK_PB6 RK_FUNC_GPIO &pcfg_pull_up_drv_level_1>;
+                };
+            };
+
+        };
+
+    };
+    //关闭其它外部输出
+        fragment@2 {
+        target = <&route_hdmi>;
+
+        __overlay__ {
+            status = "disabled";
+        };
+    };
+
+
+    fragment@3 {
+        target = <&hdmi_in_vp0>;
+
+        __overlay__ {
+            status = "disabled";
+        };
+    };
+
+    fragment@4 {
+        target = <&hdmi_in_vp1>;
+
+        __overlay__ {
+            status = "disabled";
+        };
+    };      
+
+    fragment@5 {
+        target = <&hdmi>;
+
+        __overlay__ {
+            status = "disabled";
+        };
+    };
+};
