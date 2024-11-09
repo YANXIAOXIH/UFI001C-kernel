@@ -1,5 +1,6 @@
 # SPDX-License-Identifier: GPL-2.0
 dtb-$(CONFIG_ARCH_QCOM)	+= TFT.dtb
+dtb-$(CONFIG_ARCH_QCOM)	+= TFT1.dtb
 dtb-$(CONFIG_ARCH_QCOM)	+= apq8016-samsung-gtelwifiue.dtb
 dtb-$(CONFIG_ARCH_QCOM)	+= apq8016-samsung-matissevewifi.dtb
 dtb-$(CONFIG_ARCH_QCOM)	+= apq8016-sbc.dtb
